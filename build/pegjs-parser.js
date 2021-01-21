@@ -281,7 +281,7 @@ function peg$parse(input, options) {
       peg$c47 = peg$otherExpectation("LIMIT clause"),
       peg$c48 = function(i1, tail) {
             var res = [i1];
-            if (tail === null) res.unshift({ type: 'number', value: 0 });
+            if (tail === null) res.unshift({ type: 'number', value: 0, position: location() });
             else res.push(tail[2]);
             return res;
           },
@@ -467,10 +467,12 @@ function peg$parse(input, options) {
       peg$c131 = function(d, c) { return { distinct: d, expr: c }; },
       peg$c132 = function() { return { type: 'star', value: '*' }; },
       peg$c133 = function(name, l) {
-            return { type: 'function', name, args: l ? l : { type: 'expr_list', value: [] } };
+            return { type: 'function', name, args: l ? l : { type: 'expr_list', value: [] },
+              position: location() };
           },
       peg$c134 = function(name) {
-            return { type: 'function', name, args: { type: 'expr_list', value: [] } };
+            return { type: 'function', name, args: { type: 'expr_list', value: [] },
+              position: location() };
           },
       peg$c135 = peg$otherExpectation("CAST expression"),
       peg$c136 = function(expr, target) {
@@ -519,7 +521,8 @@ function peg$parse(input, options) {
       peg$c145 = function(ca) {
             return {
               type: 'string',
-              value: ca[1].join('')
+              value: ca[1].join(''),
+              position: location()
             };
           },
       peg$c146 = function(type, ca) {
@@ -568,7 +571,8 @@ function peg$parse(input, options) {
       peg$c182 = /^[\n\r]/,
       peg$c183 = peg$classExpectation(["\n", "\r"], false, false),
       peg$c184 = function(value) {
-            return { type: 'number', value };
+            return { type: 'number', value,
+              position: location() };
           },
       peg$c185 = function(int_, frac, exp) { return parseFloat(int_ + frac + exp); },
       peg$c186 = function(int_, frac) { return parseFloat(int_ + frac); },
@@ -876,7 +880,8 @@ function peg$parse(input, options) {
               args: {
                 type: 'expr_list',
                 value: l
-              }
+              },
+              position: location()
             };
           },
       peg$c463 = function(l) {
