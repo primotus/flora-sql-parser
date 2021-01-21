@@ -626,6 +626,7 @@ primary
 column_ref
   = tbl:ident __ DOT __ col:column {
       return {
+        position: location(),
         type: 'column_ref',
         table: tbl,
         column: col
@@ -633,6 +634,7 @@ column_ref
     }
   / col:column {
       return {
+        position: location(),
         type: 'column_ref',
         table: null,
         column: col

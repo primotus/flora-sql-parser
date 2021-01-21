@@ -2,6 +2,7 @@
 
 const { expect } = require('chai');
 const { Parser } = require('../../');
+const { skiploc } = require('./util');
 
 describe('column clause', () => {
     const parser = new Parser();
@@ -9,28 +10,16 @@ describe('column clause', () => {
 
     it('should parse "*" shorthand', () => {
         ast = parser.parse('SELECT * FROM t');
-        expect(ast.columns).to.equal('*');
+        expect(skiploc(ast.columns)).to.equal('*');
     });
 
     it('should parse "table.*" column expressions', () => {
         ast = parser.parse('SELECT t.* FROM t');
 
-        expect(ast.columns).to.eql([
+        expect(skiploc(ast.columns)).to.eql([
             {
                 expr: {
-                    type: 'column_ref', 'table': 't', column: '*',
-                    "position": {
-                        "end": {
-                            "column": 11,
-                            "line": 1,
-                            "offset": 10
-                        },
-                        "start": {
-                            "column": 8,
-                            "line": 1,
-                            "offset": 7
-                        }
-                    }
+                    type: 'column_ref', 'table': 't', column: '*'
                 }, as: null
             }
         ]);
@@ -39,7 +28,7 @@ describe('column clause', () => {
     it('should parse aliases w/o "AS" keyword', () => {
         ast = parser.parse('SELECT a aa FROM  t');
 
-        expect(ast.columns).to.eql([
+        expect(skiploc(ast.columns)).to.eql([
             { expr: { type: 'column_ref', table: null, column: 'a' }, as: 'aa' }
         ]);
     });
@@ -47,7 +36,7 @@ describe('column clause', () => {
     it('should parse aliases w/ "AS" keyword', () => {
         ast = parser.parse('SELECT b.c as bc FROM t');
 
-        expect(ast.columns).to.eql([
+        expect(skiploc(ast.columns)).to.eql([
             { expr: { type: 'column_ref', table: 'b', column: 'c' }, as: 'bc' }
         ]);
     });
@@ -55,7 +44,7 @@ describe('column clause', () => {
     it('should parse multiple columns', () => {
         ast = parser.parse('SELECT b.c as bc, 1+3 FROM t');
 
-        expect(ast.columns).to.eql([
+        expect(skiploc(ast.columns)).to.eql([
             { expr: { type: 'column_ref', table: 'b', column: 'c' }, as: 'bc' },
             {
                 expr: {

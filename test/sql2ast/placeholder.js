@@ -2,6 +2,7 @@
 
 const { expect } = require('chai');
 const { Parser, util } = require('../../');
+const { skiploc } = require('./util');
 
 describe('placeholder', () => {
     const parser = new Parser();
@@ -11,7 +12,7 @@ describe('placeholder', () => {
         ast = parser.parse('SELECT col FROM t WHERE id = :id');
         ast = util.replaceParams(ast, { id: 1 });
 
-        expect(ast.where).to.eql({
+        expect(skiploc(ast.where)).to.eql({
             type: 'binary_expr',
             operator: '=',
             left: { type: 'column_ref', table: null, column: 'id' },
@@ -23,7 +24,7 @@ describe('placeholder', () => {
         ast = parser.parse('SELECT col FROM t WHERE id = :id AND "type" = :type');
         ast = util.replaceParams(ast, { id: 1, type: 'foobar' });
 
-        expect(ast.where).to.eql({
+        expect(skiploc(ast.where)).to.eql({
             type: 'binary_expr',
             operator: 'AND',
             left: {
@@ -45,7 +46,7 @@ describe('placeholder', () => {
         ast = parser.parse('SELECT col1 FROM t WHERE col2 = :name');
         ast = util.replaceParams(ast, { name: 'John Doe' });
 
-        expect(ast.where).to.eql({
+        expect(skiploc(ast.where)).to.eql({
             type: 'binary_expr',
             operator: '=',
             left: { type: 'column_ref', table: null, column: 'col2' },
@@ -57,7 +58,7 @@ describe('placeholder', () => {
         ast = parser.parse('SELECT col1 FROM t WHERE isMain = :main');
         ast = util.replaceParams(ast, { main: true });
 
-        expect(ast.where).to.eql({
+        expect(skiploc(ast.where)).to.eql({
             type: 'binary_expr',
             operator: '=',
             left: { type: 'column_ref', table: null, column: 'isMain' },
@@ -69,7 +70,7 @@ describe('placeholder', () => {
         ast = parser.parse('SELECT col1 FROM t WHERE col2 = :param');
         ast = util.replaceParams(ast, { param: null });
 
-        expect(ast.where).to.eql({
+        expect(skiploc(ast.where)).to.eql({
             type: 'binary_expr',
             operator: '=',
             left: { type: 'column_ref', table: null, column: 'col2' },
@@ -81,7 +82,7 @@ describe('placeholder', () => {
         ast = parser.parse('SELECT col1 FROM t WHERE id = :ids');
         ast = util.replaceParams(ast, { ids: [1, 3, 5, 7] });
 
-        expect(ast.where).to.eql({
+        expect(skiploc(ast.where)).to.eql({
             type: 'binary_expr',
             operator: '=',
             left: { type: 'column_ref', table: null, column: 'id' },

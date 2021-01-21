@@ -409,6 +409,7 @@ function peg$parse(input, options) {
           },
       peg$c100 = function(tbl, col) {
             return {
+              position: location(),
               type: 'column_ref',
               table: tbl,
               column: col
@@ -416,6 +417,7 @@ function peg$parse(input, options) {
           },
       peg$c101 = function(col) {
             return {
+              position: location(),
               type: 'column_ref',
               table: null,
               column: col

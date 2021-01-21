@@ -3,7 +3,7 @@
 const { expect } = require('chai');
 const { Parser } = require('../../');
 
-
+const { skiploc } = require('./util');
 describe('expressions', () => {
     const parser = new Parser();
 
@@ -11,7 +11,7 @@ describe('expressions', () => {
         it('should parse functions', () => {
             const ast = parser.parse('SELECT fun(d) FROM t');
 
-            expect(ast.columns).to.eql([
+            expect(skiploc(ast.columns)).to.eql([
                 {
                     expr: {
                         type: 'function',
@@ -38,7 +38,7 @@ describe('expressions', () => {
             it(`should parse scalar function ${func}`, () => {
                 const ast = parser.parse(`SELECT ${func} FROM t`);
 
-                expect(ast.columns).to.eql([
+                expect(skiploc(ast.columns)).to.eql([
                     {
                         expr: {
                             type: 'function',
