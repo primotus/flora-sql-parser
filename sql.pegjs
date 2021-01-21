@@ -234,6 +234,7 @@ column_list_item
   = table:ident __ DOT __ STAR {
       return {
         expr: {
+          position: location(),
           type: 'column_ref',
           table,
           column: '*'

@@ -16,7 +16,23 @@ describe('column clause', () => {
         ast = parser.parse('SELECT t.* FROM t');
 
         expect(ast.columns).to.eql([
-            {expr: {type: 'column_ref', 'table': 't', column: '*'}, as: null}
+            {
+                expr: {
+                    type: 'column_ref', 'table': 't', column: '*',
+                    "position": {
+                        "end": {
+                            "column": 11,
+                            "line": 1,
+                            "offset": 10
+                        },
+                        "start": {
+                            "column": 8,
+                            "line": 1,
+                            "offset": 7
+                        }
+                    }
+                }, as: null
+            }
         ]);
     });
 
@@ -24,7 +40,7 @@ describe('column clause', () => {
         ast = parser.parse('SELECT a aa FROM  t');
 
         expect(ast.columns).to.eql([
-            {expr: {type: 'column_ref', table: null, column: 'a'}, as: 'aa'}
+            { expr: { type: 'column_ref', table: null, column: 'a' }, as: 'aa' }
         ]);
     });
 
@@ -32,7 +48,7 @@ describe('column clause', () => {
         ast = parser.parse('SELECT b.c as bc FROM t');
 
         expect(ast.columns).to.eql([
-            {expr: {type: 'column_ref', table: 'b', column: 'c'}, as: 'bc'}
+            { expr: { type: 'column_ref', table: 'b', column: 'c' }, as: 'bc' }
         ]);
     });
 
@@ -40,7 +56,7 @@ describe('column clause', () => {
         ast = parser.parse('SELECT b.c as bc, 1+3 FROM t');
 
         expect(ast.columns).to.eql([
-            { expr: { type: 'column_ref', table: 'b', column: 'c' },  as: 'bc' },
+            { expr: { type: 'column_ref', table: 'b', column: 'c' }, as: 'bc' },
             {
                 expr: {
                     type: 'binary_expr',
