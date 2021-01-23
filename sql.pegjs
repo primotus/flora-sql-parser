@@ -52,8 +52,8 @@
     'LIMIT': true,
 
     'MICROSECOND': true,
-    'MINUTE': true,
-    'MONTH': true,
+    //'MINUTE': true,
+    //'MONTH': true,
 
     'NOT': true,
     'NULL': true,
@@ -74,27 +74,27 @@
     'SESSION_USER': true,
     'SET': true,
     'SHOW': true,
-    'STATUS': true, // reserved (MySQL)
+    //'STATUS': true, // reserved (MySQL)
     'SYSTEM_USER': true,
 
     'TABLE': true,
     'THEN': true,
     'TRUE': true,
-    'TYPE': true,   // reserved (MySQL)
+    //'TYPE': true,   // reserved (MySQL)
 
     'UNION': true,
     'UPDATE': true,
-    'USER': true,
+    //'USER': true,
     'USING': true,
 
-    'VALUES': true,
+    //'VALUES': true,
 
     'WITH': true,
-    'WEEK': true,
+    //'WEEK': true,
     'WHEN': true,
     'WHERE': true,
 
-    'YEAR': true
+    //'YEAR': true
   };
 
   function createUnaryExpr(operator, expr) {

@@ -12339,17 +12339,17 @@ function peg$parse(input, options) {
       'SESSION_USER': true,
       'SET': true,
       'SHOW': true,
-      'STATUS': true, // reserved (MySQL)
+      //'STATUS': true, // reserved (MySQL)
       'SYSTEM_USER': true,
 
       'TABLE': true,
       'THEN': true,
       'TRUE': true,
-      'TYPE': true,   // reserved (MySQL)
+      //'TYPE': true,   // reserved (MySQL)
 
       'UNION': true,
       'UPDATE': true,
-      'USER': true,
+      //'USER': true,
       'USING': true,
 
       'VALUES': true,
