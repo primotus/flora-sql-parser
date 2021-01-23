@@ -234,6 +234,7 @@ column_list_item
   = table:ident __ DOT __ STAR {
       return {
         expr: {
+          position: location(),
           type: 'column_ref',
           table,
           column: '*'
@@ -378,7 +379,7 @@ number_or_param
 limit_clause "LIMIT clause"
   = KW_LIMIT __ i1:(number_or_param) __ tail:(COMMA __ number_or_param)? {
       var res = [i1];
-      if (tail === null) res.unshift({ type: 'number', value: 0 });
+      if (tail === null) res.unshift({ type: 'number', value: 0, position: location() });
       else res.push(tail[2]);
       return res;
     }
@@ -625,6 +626,7 @@ primary
 column_ref
   = tbl:ident __ DOT __ col:column {
       return {
+        position: location(),
         type: 'column_ref',
         table: tbl,
         column: col
@@ -632,6 +634,7 @@ column_ref
     }
   / col:column {
       return {
+        position: location(),
         type: 'column_ref',
         table: null,
         column: col
@@ -717,10 +720,12 @@ star_expr
 
 func_call
   = name:ident __ LPAREN __ l:expr_list? __ RPAREN {
-      return { type: 'function', name, args: l ? l : { type: 'expr_list', value: [] } };
+      return { type: 'function', name, args: l ? l : { type: 'expr_list', value: [] },
+        position: location() };
     }
   / name:scalar_func {
-      return { type: 'function', name, args: { type: 'expr_list', value: [] } };
+      return { type: 'function', name, args: { type: 'expr_list', value: [] },
+        position: location() };
     }
 
 scalar_func
@@ -809,7 +814,8 @@ literal_string
   = ca:("'" single_char* "'") {
       return {
         type: 'string',
-        value: ca[1].join('')
+        value: ca[1].join(''),
+        position: location()
       };
     }
 
@@ -845,7 +851,8 @@ line_terminator
 
 literal_numeric
   = value:number {
-      return { type: 'number', value };
+      return { type: 'number', value,
+        position: location() };
     }
 
 number
@@ -1102,7 +1109,8 @@ proc_func_call
         args: {
           type: 'expr_list',
           value: l
-        }
+        },
+        position: location()
       };
     }
 

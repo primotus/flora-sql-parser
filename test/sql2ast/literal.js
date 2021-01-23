@@ -3,6 +3,7 @@
 const { expect } = require('chai');
 const { Parser } = require('../../');
 
+const { skiploc } = require('./util');
 describe('literals', () => {
     const parser = new Parser();
 
@@ -15,7 +16,7 @@ describe('literals', () => {
         ].forEach(([label, expr, expectedValue]) => {
             it(label, () => {
                 const ast = parser.parse(`SELECT ${expr}`);
-                expect(ast.columns).to.eql([{ expr: { type: 'number', value: expectedValue }, as: null }]);
+                expect(skiploc(ast.columns)).to.eql([{ expr: { type: 'number', value: expectedValue }, as: null }]);
             });
         });
     });
@@ -23,17 +24,17 @@ describe('literals', () => {
     describe('strings', () => {
         it('should parse single quoted strings', () => {
             const ast = parser.parse(`SELECT 'string'`);
-            expect(ast.columns).to.eql([{ expr: { type: 'string', value: 'string' }, as: null }]);
+            expect(skiploc(ast.columns)).to.eql([{ expr: { type: 'string', value: 'string' }, as: null }]);
         });
 
         it('should parse keywords in single quotes as string', () => {
             const ast = parser.parse(`SELECT 'select'`);
-            expect(ast.columns).to.eql([{ expr: { type: 'string', value: 'select' }, as: null }]);
+            expect(skiploc(ast.columns)).to.eql([{ expr: { type: 'string', value: 'select' }, as: null }]);
         });
 
         it('should parse double single quotes as escape character', () => {
             const ast = parser.parse(`SELECT 'wendy''s'`);
-            expect(ast.columns).to.eql([{ expr: { type: 'string', value: "wendy's" }, as: null }]);
+            expect(skiploc(ast.columns)).to.eql([{ expr: { type: 'string', value: "wendy's" }, as: null }]);
         });
     });
 
@@ -50,7 +51,7 @@ describe('literals', () => {
             [type, type.toUpperCase()].forEach((t) => {
                 it(t, () => {
                     const ast = parser.parse(`SELECT ${t} '${value}'`);
-                    expect(ast.columns).to.eql([{ expr: { type, value }, as: null }]);
+                    expect(skiploc(ast.columns)).to.eql([{ expr: { type, value }, as: null }]);
                 });
             });
         });
@@ -68,7 +69,7 @@ describe('literals', () => {
                 it(`should support ${qualifier}`, () => {
                     const ast = parser.parse(`SELECT CURRENT_DATE + INTERVAL 10 ${qualifier} FROM dual`);
 
-                    expect(ast.columns).to.deep.contain({
+                    expect(skiploc(ast.columns)).to.deep.contain({
                         expr: {
                             type: 'binary_expr',
                             operator: '+',
@@ -97,7 +98,7 @@ describe('literals', () => {
             it(description, () => {
                 const ast = parser.parse(`SELECT CURRENT_DATE + INTERVAL ${interval} DAY FROM dual`);
 
-                expect(ast.columns).to.deep.contain({
+                expect(skiploc(ast.columns)).to.deep.contain({
                     expr: {
                         type: 'binary_expr',
                         operator: '+',
@@ -121,7 +122,7 @@ describe('literals', () => {
         it('should support intervals as strings', () => {
             const ast = parser.parse(`SELECT CURRENT_DATE + INTERVAL '10' DAY FROM dual`);
 
-            expect(ast.columns).to.deep.contain({
+            expect(skiploc(ast.columns)).to.deep.contain({
                 expr: {
                     type: 'binary_expr',
                     operator: '+',
@@ -148,7 +149,7 @@ describe('literals', () => {
             it(description, () => {
                 const ast = parser.parse(`SELECT CURRENT_DATE + INTERVAL ${sign} '-10' DAY FROM dual`);
 
-                expect(ast.columns).to.deep.contain({
+                expect(skiploc(ast.columns)).to.deep.contain({
                     expr: {
                         type: 'binary_expr',
                         operator: '+',

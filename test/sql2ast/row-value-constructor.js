@@ -2,6 +2,7 @@
 
 const { expect } = require('chai');
 const { Parser } = require('../../');
+const { skiploc } = require('./util');
 
 describe('row value constructor', () => {
     const parser = new Parser();
@@ -9,7 +10,7 @@ describe('row value constructor', () => {
     it('should parse simple values', () => {
         const ast = parser.parse(`SELECT * FROM "user" WHERE (firstname, lastname) = ('John', 'Doe')`);
 
-        expect(ast.where).to.eql({
+        expect(skiploc(ast.where)).to.eql({
             type: 'binary_expr',
             operator: '=',
             left: {
