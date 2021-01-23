@@ -6,7 +6,7 @@
 
   function createUnaryExpr(op, e) {
     return {
-      type     : 'unary_expr',
+      location: location(), type     : 'unary_expr',
       operator : op,
       expr     : e
     }
@@ -14,7 +14,7 @@
 
   function createBinaryExpr(op, left, right) {
     return {
-      type      : 'binary_expr',
+      location: location(), type      : 'binary_expr',
       operator  : op,
       left      : left,
       right     : right
@@ -272,7 +272,7 @@ select_stmt_nake
     o:order_by_clause?  __
     l:limit_clause?  {
       return {
-        type      : 'select',
+        location: location(), type      : 'select',
         distinct  : d,
         columns   : c,
         from      : f,
@@ -418,7 +418,7 @@ limit_clause
       var res = [i1];
       if (!tail) {
         res.unshift({
-          type  : 'number',
+          location: location(), type : 'number',
           value : 0
         });
       } else {
@@ -434,7 +434,7 @@ update_stmt
     l:set_list   __
     w:where_clause {
       return {
-        type  : 'update',
+        location: location(), type : 'update',
         db    : t.db,
         table : t.table,
         set   : l,
@@ -462,7 +462,7 @@ replace_insert_stmt
     c:column_list  __ RPAREN __
     v:value_clause             {
       return {
-        type      : ri,
+        location: location(), type      : ri,
         db        : t.db,
         table     : t.table,
         columns   : c,
@@ -503,7 +503,7 @@ expr_list_or_empty
   = l:expr_list
   / (''{
       return {
-        type  : 'expr_list',
+        location: location(), type : 'expr_list',
         value : []
       }
     })
@@ -660,14 +660,14 @@ primary
 column_ref
   = tbl:ident __ DOT __ col:column {
       return {
-        type  : 'column_ref',
+        location: location(), type : 'column_ref',
         table : tbl,
         column : col
       };
     }
   / col:column {
       return {
-        type  : 'column_ref',
+        location: location(), type : 'column_ref',
         table : '',
         column: col
       };
@@ -687,7 +687,7 @@ column =
   name:column_name !{ return reservedMap[name.toUpperCase()] === true; } {
     return name;
   }
-  /'`' chars:[^`]+ '`' {
+  /'\"' chars:[^"]+ '\"' {
     return chars.join('');
   }
 
@@ -757,7 +757,7 @@ count_arg
 star_expr
   = "*" {
       return {
-        type  : 'star',
+        location: location(), type : 'star',
         value : '*'
       }
     }
@@ -782,7 +782,7 @@ literal_list
 literal_null
   = KW_NULL {
       return {
-        type  : 'null',
+        location: location(), type : 'null',
         value : null
       };
     }
@@ -790,22 +790,21 @@ literal_null
 literal_bool
   = KW_TRUE {
       return {
-        type  : 'bool',
+        location: location(), type : 'bool',
         value : true
       };
     }
   / KW_FALSE {
       return {
-        type  : 'bool',
+        location: location(), type : 'bool',
         value : false
       };
     }
 
 literal_string
-  = ca:( ('"' double_char* '"')
-        /("'" single_char* "'")) {
+  = ca:( ("'" single_char* "'")) {
       return {
-        type  : 'string',
+        location: location(), type : 'string',
         value : ca[1].join('')
       }
     }
@@ -838,7 +837,7 @@ line_terminator
 literal_numeric
   = n:number {
       return {
-        type  : 'number',
+        location: location(), type : 'number',
         value : n
       }
     }
@@ -1040,7 +1039,7 @@ proc_func_call
         type : 'function',
         name : name,
         args : {
-          type  : 'expr_list',
+          location: location(), type : 'expr_list',
           value : l
         }
       }
