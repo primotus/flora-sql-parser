@@ -191,7 +191,7 @@ function peg$parse(input, options) {
       peg$c16 = function(table) {
             return {
               expr: {
-                position: location(),
+                location: location(),
                 type: 'column_ref',
                 table,
                 column: '*'
@@ -281,7 +281,7 @@ function peg$parse(input, options) {
       peg$c47 = peg$otherExpectation("LIMIT clause"),
       peg$c48 = function(i1, tail) {
             var res = [i1];
-            if (tail === null) res.unshift({ type: 'number', value: 0, position: location() });
+            if (tail === null) res.unshift({ type: 'number', value: 0, location: location() });
             else res.push(tail[2]);
             return res;
           },
@@ -409,7 +409,7 @@ function peg$parse(input, options) {
           },
       peg$c100 = function(tbl, col) {
             return {
-              position: location(),
+              location: location(),
               type: 'column_ref',
               table: tbl,
               column: col
@@ -417,7 +417,7 @@ function peg$parse(input, options) {
           },
       peg$c101 = function(col) {
             return {
-              position: location(),
+              location: location(),
               type: 'column_ref',
               table: null,
               column: col
@@ -468,11 +468,11 @@ function peg$parse(input, options) {
       peg$c132 = function() { return { type: 'star', value: '*' }; },
       peg$c133 = function(name, l) {
             return { type: 'function', name, args: l ? l : { type: 'expr_list', value: [] },
-              position: location() };
+              location: location() };
           },
       peg$c134 = function(name) {
             return { type: 'function', name, args: { type: 'expr_list', value: [] },
-              position: location() };
+              location: location() };
           },
       peg$c135 = peg$otherExpectation("CAST expression"),
       peg$c136 = function(expr, target) {
@@ -522,7 +522,7 @@ function peg$parse(input, options) {
             return {
               type: 'string',
               value: ca[1].join(''),
-              position: location()
+              location: location()
             };
           },
       peg$c146 = function(type, ca) {
@@ -572,7 +572,7 @@ function peg$parse(input, options) {
       peg$c183 = peg$classExpectation(["\n", "\r"], false, false),
       peg$c184 = function(value) {
             return { type: 'number', value,
-              position: location() };
+              location: location() };
           },
       peg$c185 = function(int_, frac, exp) { return parseFloat(int_ + frac + exp); },
       peg$c186 = function(int_, frac) { return parseFloat(int_ + frac); },
@@ -881,7 +881,7 @@ function peg$parse(input, options) {
                 type: 'expr_list',
                 value: l
               },
-              position: location()
+              location: location()
             };
           },
       peg$c463 = function(l) {
@@ -12317,8 +12317,8 @@ function peg$parse(input, options) {
       'LIMIT': true,
 
       'MICROSECOND': true,
-      'MINUTE': true,
-      'MONTH': true,
+      //'MINUTE': true,
+      //'MONTH': true,
 
       'NOT': true,
       'NULL': true,
@@ -12352,14 +12352,14 @@ function peg$parse(input, options) {
       //'USER': true,
       'USING': true,
 
-      'VALUES': true,
+      //'VALUES': true,
 
       'WITH': true,
-      'WEEK': true,
+      //'WEEK': true,
       'WHEN': true,
       'WHERE': true,
 
-      'YEAR': true
+      //'YEAR': true
     };
 
     function createUnaryExpr(operator, expr) {

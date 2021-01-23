@@ -5,7 +5,7 @@ const scanDelete = (o) => {
         return;
     }
     if (o && typeof (o) === "object") {
-        if(o.position) delete o.position;
+        if(o.location) delete o.location;
         Object.keys(o).map(k => {
             scanDelete(o[k])
         });
@@ -15,8 +15,8 @@ const scanDelete = (o) => {
     //     expr.map(b => scanDelete(b));
     //     return;
     // }
-    // if (expr.position) {
-    //     delete expr.position;
+    // if (expr.location) {
+    //     delete expr.location;
     // }
     // if (expr.expr) scanDelete(expr.expr)
     // if (expr.args) scanDelete(expr.args)
