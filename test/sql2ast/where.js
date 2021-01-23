@@ -3,7 +3,7 @@
 const { expect } = require('chai');
 const { Parser } = require('../../');
 
-describe('where clause', () => {
+describe.only('where clause', () => {
     const parser = new Parser();
     let ast;
 
